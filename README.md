@@ -1,4 +1,4 @@
-# FactorVAE
+# RF VAE
 Pytorch implementation of RF_VAE proposed in Relevance Factor VAE: Learning and Identifying Disentangled Factors, Kim et al.([https://arxiv.org/abs/1902.01568])
 <br>
 
