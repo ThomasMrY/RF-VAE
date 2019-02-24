@@ -393,6 +393,12 @@ class Solver(object):
                       opts=dict(
                         xlabel='iteration',
                         ylabel='kl divergence',))
+        self.viz.bar(X=zero_init,
+                     env=self.name + '/lines',
+                     win=self.win_id['r_distribute'],
+                     opts=dict(
+                         xlabel='dimention',
+                         ylabel='relevance score', ))
 
     def net_mode(self, train):
         if not isinstance(train, bool):
