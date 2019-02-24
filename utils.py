@@ -32,13 +32,13 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
-def grid2gif(image_str, output_gif, delay=100):
+def grid2gif(image_str, output_gif, output_dir,delay=100):
     """Make GIF from images.
 
     code from:
         https://stackoverflow.com/questions/753190/programmatically-generate-video-or-animated-gif-in-python/34555939#34555939
     """
-    image_list = [Image.open(img) for img in image_str.split(' ')]
+    image_list = [Image.open(os.path.join(output_dir,img)) for img in image_str.split(' ')[:-1]]
     image_list[0].save(output_gif, save_all=True, append_images=image_list[1:], duration=delay, loop=0)
 
 def mkdirs(path):

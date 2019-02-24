@@ -22,7 +22,7 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Factor-VAE')
+    parser = argparse.ArgumentParser(description='RF-VAE')
 
     parser.add_argument('--name', default='main', type=str, help='name of the experiment')
     parser.add_argument('--cuda', default=True, type=str2bool, help='enable cuda')
@@ -40,10 +40,8 @@ if __name__ == "__main__":
     parser.add_argument('--beta1_D', default=0.5, type=float, help='beta1 parameter of the Adam optimizer for the discriminator')
     parser.add_argument('--beta2_D', default=0.9, type=float, help='beta2 parameter of the Adam optimizer for the discriminator')
     parser.add_argument('--lr_r', default=1e-4, type=float, help='learning rate of the relevance factor r')
-    parser.add_argument('--beta1_r', default=0.5, type=float,
-                        help='beta1 parameter of the Adam optimizer for the relevance factor r')
-    parser.add_argument('--beta2_r', default=0.9, type=float,
-                        help='beta2 parameter of the Adam optimizer for the relevance factor r')
+    parser.add_argument('--beta1_r', default=0.5, type=float,help='beta1 parameter of the Adam optimizer for the relevance factor r')
+    parser.add_argument('--beta2_r', default=0.9, type=float,help='beta2 parameter of the Adam optimizer for the relevance factor r')
 
     parser.add_argument('--dset_dir', default='data', type=str, help='dataset directory')
     parser.add_argument('--dataset', default='CelebA', type=str, help='dataset name')

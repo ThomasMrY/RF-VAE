@@ -17,7 +17,7 @@ def kl_divergence(mu, logvar,r):
     return weighted_kld.mean()
 
 def entropy(r):
-    H = (r*r.log()+(1-r)*(1-r).log()).sum(1)
+    H = (r*r.log()+(1-r)*(1-r).log()).sum()
     return H
 
 def permute_dims(z):

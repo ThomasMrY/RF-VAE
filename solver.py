@@ -47,7 +47,7 @@ class Solver(object):
         self.lr_r = args.lr_r
         self.beta1_r = args.beta1_r
         self.beta2_r = args.beta2_r
-        ones = torch.Tensor(np.ones([self.z_dim])*0.5)  # 先创建一个自定义权值的Tensor，这里为了方便将所有权值设为1
+        ones = torch.Tensor(np.ones([self.z_dim])*0.5).to(self.device)  # 先创建一个自定义权值的Tensor，这里为了方便将所有权值设为1
         self.r = torch.nn.Parameter(ones)
         if args.dataset == 'dsprites':
             self.VAE = RF_VAE1(self.z_dim).to(self.device)
@@ -61,13 +61,13 @@ class Solver(object):
         self.D = Discriminator(self.z_dim).to(self.device)
         self.optim_D = optim.Adam(self.D.parameters(), lr=self.lr_D,
                                   betas=(self.beta1_D, self.beta2_D))
-        self.optim_r = optim.Adam(self.r,lr=self.lr_r,
+        self.optim_r = optim.Adam([self.r],lr=self.lr_r,
                                   betas=(self.beta1_r,self.beta2_r))
         self.nets = [self.VAE, self.D]
 
         # Visdom
         self.viz_on = args.viz_on
-        self.win_id = dict(D_z='win_D_z', recon='win_recon', kld='win_kld', acc='win_acc')
+        self.win_id = dict(D_z='win_D_z', recon='win_recon', kld='win_kld', acc='win_acc',r_distribute = 'r_distribute')
         self.line_gather = DataGather('iter', 'soft_D_z', 'soft_D_z_pperm', 'recon', 'kld', 'acc','r_distribute')
         self.image_gather = DataGather('true', 'recon')
         if self.viz_on:
@@ -107,7 +107,7 @@ class Solver(object):
                 x_true1 = x_true1.to(self.device)
                 x_recon, mu, logvar, z = self.VAE(x_true1)
                 vae_recon_loss = recon_loss(x_true1, x_recon)
-                vae_kld = kl_divergence(mu, logvar)
+                vae_kld = kl_divergence(mu, logvar,self.r)
                 H_r = entropy(self.r)
 
                 D_z = self.D(self.r*z)
@@ -152,7 +152,7 @@ class Solver(object):
                                             recon=vae_recon_loss.item(),
                                             kld=vae_kld.item(),
                                             acc=D_acc.item(),
-                                            r_distrubute=self.r.data.cpu())
+                                            r_distribute=self.r.data.cpu())
 
                 if self.viz_on and (self.global_iter%self.viz_la_iter == 0):
                     self.visualize_line()
@@ -196,7 +196,7 @@ class Solver(object):
         D_acc = torch.Tensor(data['acc'])
         soft_D_z = torch.Tensor(data['soft_D_z'])
         soft_D_z_pperm = torch.Tensor(data['soft_D_z_pperm'])
-        r_distribute = torch.Tensor(data['r_distribute'])
+        r_distribute = data['r_distribute'][-1]
         soft_D_zs = torch.stack([soft_D_z, soft_D_z_pperm], -1)
 
         self.viz.line(X=iters,
@@ -232,10 +232,10 @@ class Solver(object):
                       opts=dict(
                         xlabel='iteration',
                         ylabel='kl divergence',))
-        self.viz.close(win=self.win_id['r_distri'],env=self.name + '/lines')
+        self.viz.close(win=self.win_id['r_distribute'],env=self.name + '/lines')
         self.viz.bar(X=r_distribute,
                       env=self.name + '/lines',
-                      win=self.win_id['r_distri'],
+                      win=self.win_id['r_distribute'],
                       opts=dict(
                           xlabel='dimention',
                           ylabel='relevance score', ))
@@ -358,7 +358,7 @@ class Solver(object):
                     name_str = name_str + '{}_{}.jpg '.format(key, j)
 
                 grid2gif(name_str,
-                         str(os.path.join(output_dir, key+'.gif')), delay=10)
+                         str(os.path.join(output_dir, key+'.gif')),output_dir,delay=10)
 
         self.net_mode(train=True)
 
