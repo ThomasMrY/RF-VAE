@@ -412,9 +412,11 @@ class Solver(object):
 
     def save_checkpoint(self, ckptname='last', verbose=True):
         model_states = {'D':self.D.state_dict(),
-                        'VAE':self.VAE.state_dict()}
+                        'VAE':self.VAE.state_dict(),
+                        'r':self.r}
         optim_states = {'optim_D':self.optim_D.state_dict(),
-                        'optim_VAE':self.optim_VAE.state_dict()}
+                        'optim_VAE':self.optim_VAE.state_dict(),
+                        'optim_r':self.optim_r.state_dict()}
         states = {'iter':self.global_iter,
                   'model_states':model_states,
                   'optim_states':optim_states}
@@ -445,8 +447,10 @@ class Solver(object):
             self.global_iter = checkpoint['iter']
             self.VAE.load_state_dict(checkpoint['model_states']['VAE'])
             self.D.load_state_dict(checkpoint['model_states']['D'])
+            self.r = checkpoint['model_states']['r']
             self.optim_VAE.load_state_dict(checkpoint['optim_states']['optim_VAE'])
             self.optim_D.load_state_dict(checkpoint['optim_states']['optim_D'])
+            self.optim_r.load_state_dict(checkpoint['optim_states']['optim_r'])
             self.pbar.update(self.global_iter)
             if verbose:
                 self.pbar.write("=> loaded checkpoint '{} (iter {})'".format(filepath, self.global_iter))
