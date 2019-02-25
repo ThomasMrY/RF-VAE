@@ -7,4 +7,5 @@ python main.py --dataset 3dchairs --num_workers 4 --batch_size 64 \
                --ckpt_save_iter 10000 --max_iter 1e6 \
                --lr_VAE 1e-4 --beta1_VAE 0.9 --beta2_VAE 0.999 \
                --lr_D 1e-5 --beta1_D 0.5 --beta2_D 0.9 \
+               --lr_r 1e-1 --beta1_r 0.5 --beta2_r 0.9 \
                --name $1 --z_dim 10 --gamma 3.2 --ckpt_load last
