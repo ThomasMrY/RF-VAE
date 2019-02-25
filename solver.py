@@ -77,8 +77,6 @@ class Solver(object):
             self.viz_la_iter = args.viz_la_iter
             self.viz_ra_iter = args.viz_ra_iter
             self.viz_ta_iter = args.viz_ta_iter
-            if not self.viz.win_exists(env=self.name+'/lines', win=self.win_id['D_z']):
-                self.viz_init()
 
         # Checkpoint
         self.ckpt_dir = os.path.join(args.ckpt_dir, args.name)
@@ -198,41 +196,78 @@ class Solver(object):
         soft_D_z_pperm = torch.Tensor(data['soft_D_z_pperm'])
         r_distribute = data['r_distribute'][-1]
         soft_D_zs = torch.stack([soft_D_z, soft_D_z_pperm], -1)
-
-        self.viz.line(X=iters,
-                      Y=soft_D_zs,
-                      env=self.name+'/lines',
-                      win=self.win_id['D_z'],
-                      update='append',
-                      opts=dict(
-                        xlabel='iteration',
-                        ylabel='D(.)',
-                        legend=['D(z)', 'D(z_perm)']))
-        self.viz.line(X=iters,
-                      Y=recon,
-                      env=self.name+'/lines',
-                      win=self.win_id['recon'],
-                      update='append',
-                      opts=dict(
-                        xlabel='iteration',
-                        ylabel='reconstruction loss',))
-        self.viz.line(X=iters,
-                      Y=D_acc,
-                      env=self.name+'/lines',
-                      win=self.win_id['acc'],
-                      update='append',
-                      opts=dict(
-                        xlabel='iteration',
-                        ylabel='discriminator accuracy',))
-        self.viz.line(X=iters,
-                      Y=kld,
-                      env=self.name+'/lines',
-                      win=self.win_id['kld'],
-                      update='append',
-                      opts=dict(
-                        xlabel='iteration',
-                        ylabel='kl divergence',))
-        self.viz.close(win=self.win_id['r_distribute'],env=self.name + '/lines')
+        if not self.viz.win_exists(env=self.name + '/lines', win=self.win_id['D_z']):
+            self.viz.line(X=iters,
+                          Y=soft_D_zs,
+                          env=self.name + '/lines',
+                          win=self.win_id['D_z'],
+                          opts=dict(
+                              xlabel='iteration',
+                              ylabel='D(.)',
+                              legend=['D(z)', 'D(z_perm)']))
+        else:
+            self.viz.line(X=iters,
+                          Y=soft_D_zs,
+                          env=self.name+'/lines',
+                          win=self.win_id['D_z'],
+                          update='append',
+                          opts=dict(
+                            xlabel='iteration',
+                            ylabel='D(.)',
+                            legend=['D(z)', 'D(z_perm)']))
+        if not self.viz.win_exists(env=self.name + '/lines', win=self.win_id['recon']):
+            self.viz.line(X=iters,
+                          Y=recon,
+                          env=self.name + '/lines',
+                          win=self.win_id['recon'],
+                          opts=dict(
+                              xlabel='iteration',
+                              ylabel='reconstruction loss', ))
+        else:
+            self.viz.line(X=iters,
+                          Y=recon,
+                          env=self.name+'/lines',
+                          win=self.win_id['recon'],
+                          update='append',
+                          opts=dict(
+                            xlabel='iteration',
+                            ylabel='reconstruction loss',))
+        if not self.viz.win_exists(env=self.name + '/lines', win=self.win_id['acc']):
+            self.viz.line(X=iters,
+                          Y=D_acc,
+                          env=self.name + '/lines',
+                          win=self.win_id['acc'],
+                          opts=dict(
+                              xlabel='iteration',
+                              ylabel='discriminator accuracy', ))
+        else:
+            self.viz.line(X=iters,
+                          Y=D_acc,
+                          env=self.name+'/lines',
+                          win=self.win_id['acc'],
+                          update='append',
+                          opts=dict(
+                            xlabel='iteration',
+                            ylabel='discriminator accuracy',))
+        if not self.viz.win_exists(env=self.name + '/lines', win=self.win_id['kld']):
+            self.viz.line(X=iters,
+                          Y=kld,
+                          env=self.name+'/lines',
+                          win=self.win_id['kld'],
+                          opts=dict(
+                            xlabel='iteration',
+                            ylabel='kl divergence',))
+        else:
+            self.viz.line(X=iters,
+                          Y=kld,
+                          env=self.name + '/lines',
+                          win=self.win_id['kld'],
+                          update='append',
+                          opts=dict(
+                              xlabel='iteration',
+                              ylabel='kl divergence', ))
+        if self.viz.win_exists(env=self.name + '/lines', win=self.win_id['r_distribute']):
+            self.viz.close(win=self.win_id['r_distribute'],env=self.name + '/lines')
         self.viz.bar(X=r_distribute,
                       env=self.name + '/lines',
                       win=self.win_id['r_distribute'],
@@ -362,43 +397,6 @@ class Solver(object):
 
         self.net_mode(train=True)
 
-    def viz_init(self):
-        zero_init = torch.zeros([1])
-        self.viz.line(X=zero_init,
-                      Y=torch.stack([zero_init, zero_init], -1),
-                      env=self.name+'/lines',
-                      win=self.win_id['D_z'],
-                      opts=dict(
-                        xlabel='iteration',
-                        ylabel='D(.)',
-                        legend=['D(z)', 'D(z_perm)']))
-        self.viz.line(X=zero_init,
-                      Y=zero_init,
-                      env=self.name+'/lines',
-                      win=self.win_id['recon'],
-                      opts=dict(
-                        xlabel='iteration',
-                        ylabel='reconstruction loss',))
-        self.viz.line(X=zero_init,
-                      Y=zero_init,
-                      env=self.name+'/lines',
-                      win=self.win_id['acc'],
-                      opts=dict(
-                        xlabel='iteration',
-                        ylabel='discriminator accuracy',))
-        self.viz.line(X=zero_init,
-                      Y=zero_init,
-                      env=self.name+'/lines',
-                      win=self.win_id['kld'],
-                      opts=dict(
-                        xlabel='iteration',
-                        ylabel='kl divergence',))
-        self.viz.bar(X=zero_init,
-                     env=self.name + '/lines',
-                     win=self.win_id['r_distribute'],
-                     opts=dict(
-                         xlabel='dimention',
-                         ylabel='relevance score', ))
 
     def net_mode(self, train):
         if not isinstance(train, bool):
