@@ -77,9 +77,10 @@ localhost:8097
 <br>
 
 ##### visdom line plot
-![dsprites_plot](result/Capture.png)
-
-![dsprites_plot](result/distribute.png)
+<p align="center">
+<img src=result/Capture.png>
+<img src=result/distribute.png>
+</p>
 ##### latent traversal gif(```--save_output True```)
 <p align="center">
 <img src=result/random_img.gif>
@@ -91,7 +92,7 @@ localhost:8097
 
 ##### reconstruction(left: true, right: reconstruction)
 <p align="center">
-<img src=result/300000.gif>
+<img src=result/300000.jpg>
 </p>
 
 ### Reference
