@@ -78,8 +78,8 @@ localhost:8097
 
 ##### visdom line plot
 <p align="center">
-<img src=result/Capture.png>
-<img src=result/distribute.png>
+<img src=result/Capture.PNG>
+<img src=result/distribute.PNG>
 </p>
 ##### latent traversal gif(```--save_output True```)
 <p align="center">
