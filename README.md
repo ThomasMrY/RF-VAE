@@ -76,6 +76,24 @@ localhost:8097
 ```
 <br>
 
+##### visdom line plot
+![dsprites_plot](result/Capture.png)
+
+![dsprites_plot](result/distribute.png)
+##### latent traversal gif(```--save_output True```)
+<p align="center">
+<img src=result/random_img.gif>
+<img src=result/fixed_heart.gif>
+<img src=result/fixed_square.gif>
+<img src=result/fixed_ellipse.gif>
+</p>
+
+
+##### reconstruction(left: true, right: reconstruction)
+<p align="center">
+<img src=result/300000.gif>
+</p>
+
 ### Reference
 1. Relevance Factor VAE: Learning and Identifying Disentangled Factors.([https://arxiv.org/abs/1902.01568])
 
