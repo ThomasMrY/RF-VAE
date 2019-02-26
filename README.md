@@ -91,7 +91,7 @@ localhost:8097
 
 ##### reconstruction(left: true, right: reconstruction)
 <p align="center">
-<img src=result/300000.gif>
+<img src=result/300000.jpg>
 </p>
 
 ### Reference
