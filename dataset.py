@@ -67,7 +67,7 @@ def return_data(args):
         transforms.ToTensor(),])
 
     if name.lower() == 'celeba':
-        root = os.path.join(dset_dir, 'img_align_celeba/CelebA')
+        root = os.path.join(dset_dir, 'img_align_celeba')
         train_kwargs = {'root':root, 'transform':transform}
         dset = CustomImageFolder
     elif name.lower() == '3dchairs':
